@@ -1,0 +1,58 @@
+\chapter{Modern frontiers in statistical learning theory}
+
+\section{Probabilistic model}
+\begin{itemize}
+    \item product space model, loss, problem formulation 
+        \cite{smale_learning}
+    \item review of conditional probabilities, distributions 
+        and expectation \cite{billingsley,dudley,royden}
+    \item regression function, squared loss (and others) and 
+        noise \cite{smale_learning}
+    \item discussion of squared loss \cite{fitwithoutfear}
+    \item hypothesis space and true risk 
+        \cite{smale_learning}
+    \item marginal and conditional variant of
+        fubini \cite{dudley,billingsley}
+\end{itemize}
+
+\section{Statistical learning and regression problems}
+\begin{itemize}
+    \item samples and empirical measure
+        \footnote{\url{https://en.wikipedia.org/wiki/Empirical_measure}}
+    \item empirical risk
+    \item consistency \cite{vapnik}
+    \item decomposition into approximation and sample error 
+        \cite{smale_learning}
+    \item generalization and structural risk minimization
+        \cite{vapnik}
+\end{itemize}
+
+\section{New frontiers: the interpolating regime}
+\begin{itemize}
+    \item the classical bias-variance trade-off and SRM point of 
+        view on generalization \cite{vapnik}
+    \item they don't explain highly over-parameterized deep learning
+        \cite{fitwithoutfear,understandkernel,rethink}
+    \item double descent \cite{reconciling,twomodels}
+    \item interpolation is not always bad also for other estimators; 
+        benign overfitting theoretically \cite{benignlinear,benignridge}
+        and practically \cite{justinterpolate,surprises}
+    \item distinctions into catastrophic, tempered and benign overfitting
+        with kernel ridgeless regression examples \cite{taxonomy}
+    \item but where is generalization coming from if not from 
+        explicit regularization? 
+        \cite{benignimplicit,justinterpolate,deepimplicitreg}
+\end{itemize}
+
+\section{Sobolev kernels as study model}
+\begin{itemize}
+    \item most of these phenomena are captured by kernel methods
+        \cite{justinterpolate,understandkernel}
+    \item in particular laplace kernel is of interest: shares RKHS with
+        neural tangent kernel \cite{ntk,ntklaplace}
+    \item more generally we will study matern kernels coming from sobolev
+        spaces: advantages include smoothness control, easy interpolation,
+        and very expressive hypothesis spaces
+    \item already shown to be only consistent in high dimensions 
+        \cite{laplaceconsistency,sobolevconsistency}
+\end{itemize}

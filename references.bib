@@ -1,0 +1,255 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   REFERENCES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@article {smale_learning,
+    AUTHOR = {Cucker, Felipe and Smale, Steve},
+     TITLE = {On the mathematical foundations of learning},
+   JOURNAL = {Bull. Amer. Math. Soc. (N.S.)},
+  FJOURNAL = {American Mathematical Society. Bulletin. New Series},
+    VOLUME = {39},
+      YEAR = {2002},
+    NUMBER = {1},
+     PAGES = {1--49},
+      ISSN = {0273-0979},
+   MRCLASS = {68T05 (68T10 91E40 94A20)},
+  MRNUMBER = {1864085},
+ MRREVIEWER = {Andrei Mart\'{\i}nez Finkelshtein},
+       DOI = {10.1090/S0273-0979-01-00923-5},
+       URL = {https://doi.org/10.1090/S0273-0979-01-00923-5}, 
+}
+@book {vapnik,
+    AUTHOR = {Vapnik, Vladimir N.},
+     TITLE = {The nature of statistical learning theory},
+    SERIES = {Statistics for Engineering and Information Science},
+   EDITION = {Second},
+ PUBLISHER = {Springer-Verlag, New York},
+      YEAR = {2000},
+     PAGES = {xx+314},
+      ISBN = {0-387-98780-0},
+   MRCLASS = {68T05 (60F10 62G99)},
+  MRNUMBER = {1719582},
+       DOI = {10.1007/978-1-4757-3264-1},
+       URL = {https://doi.org/10.1007/978-1-4757-3264-1}, 
+}
+
+@book{royden,
+  author = {Royden, H. L.},
+  address = {New York, NY},
+  booktitle = {Real analysis},
+  edition = {Fourth edition [2018 reissue].},
+  isbn = {9780134689494},
+  keywords = {Functions of real variables},
+  language = {eng},
+  lccn = {2016055244},
+  publisher = {Pearson},
+  series = {Pearson modern classic},
+  title = {Real analysis / H.L. Royden, Stanford University, P.M. Fitzpatrick, University of Maryland, College Park.},
+  year = {2018 - 2010},
+}
+@book {dudley,
+    AUTHOR = {Dudley, R. M.},
+     TITLE = {Real analysis and probability},
+    SERIES = {Cambridge Studies in Advanced Mathematics},
+    VOLUME = {74},
+      NOTE = {Revised reprint of the 1989 original},
+ PUBLISHER = {Cambridge University Press, Cambridge},
+      YEAR = {2002},
+     PAGES = {x+555},
+      ISBN = {0-521-00754-2},
+   MRCLASS = {60-01 (00A05 28-01 46-01 54-01)},
+  MRNUMBER = {1932358},
+       DOI = {10.1017/CBO9780511755347},
+       URL = {https://doi.org/10.1017/CBO9780511755347},
+}
+@book {billingsley,
+    AUTHOR = {Billingsley, Patrick},
+     TITLE = {Probability and measure},
+    SERIES = {Wiley Series in Probability and Mathematical Statistics},
+   EDITION = {Third},
+      NOTE = {A Wiley-Interscience Publication},
+ PUBLISHER = {John Wiley \& Sons, Inc., New York},
+      YEAR = {1995},
+     PAGES = {xiv+593},
+      ISBN = {0-471-00710-2},
+   MRCLASS = {60-01 (28-01)},
+  MRNUMBER = {1324786}, }
+
+@misc{clason,
+	title = {Regularization of Inverse Problems},
+	url = {http://arxiv.org/abs/2001.00617},
+	doi = {10.48550/arXiv.2001.00617},
+	publisher = {{arXiv}},
+	author = {Clason, Christian},
+	urldate = {2022-11-15},
+	date = {2021-02-08},
+	eprinttype = {arxiv},
+	eprint = {2001.00617 [cs, math]},
+	keywords = {Mathematics - Functional Analysis, Mathematics - Numerical Analysis}, }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MODERN REGIME PAPERS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+@inproceedings{understandkernel,
+  title={To understand deep learning we need to understand kernel learning},
+  author={Belkin, Mikhail and Ma, Siyuan and Mandal, Soumik},
+  booktitle={International Conference on Machine Learning},
+  pages={541--549},
+  year={2018},
+  organization={PMLR}
+}
+@article{justinterpolate,
+  title={Just interpolate: Kernel “ridgeless” regression can generalize},
+  author={Liang, Tengyuan and Rakhlin, Alexander},
+  year={2020}
+}
+@article{benignlinear,
+  title={Benign overfitting in linear regression},
+  author={Bartlett, Peter L and Long, Philip M and Lugosi, G{\'a}bor and Tsigler, Alexander},
+  journal={Proceedings of the National Academy of Sciences},
+  volume={117},
+  number={48},
+  pages={30063--30070},
+  year={2020},
+  publisher={National Acad Sciences}
+}
+@article{benignridge,
+  title={Benign overfitting in ridge regression},
+  author={Tsigler, Alexander and Bartlett, Peter L},
+  journal={arXiv preprint arXiv:2009.14286},
+  year={2020}
+}
+@InProceedings{sobolevconsistency,
+  title = 	 {Kernel interpolation in Sobolev spaces is not consistent in low dimensions},
+  author =       {Buchholz, Simon},
+  booktitle = 	 {Proceedings of Thirty Fifth Conference on Learning Theory},
+  pages = 	 {3410--3440},
+  year = 	 {2022},
+  editor = 	 {Loh, Po-Ling and Raginsky, Maxim},
+  volume = 	 {178},
+  series = 	 {Proceedings of Machine Learning Research},
+  month = 	 {02--05 Jul},
+  publisher =    {PMLR},
+  pdf = 	 {https://proceedings.mlr.press/v178/buchholz22a/buchholz22a.pdf},
+  url = 	 {https://proceedings.mlr.press/v178/buchholz22a.html},
+}
+@inproceedings{laplaceconsistency,
+  title={Consistency of interpolation with Laplace kernels is a high-dimensional phenomenon},
+  author={Rakhlin, Alexander and Zhai, Xiyu},
+  booktitle={Conference on Learning Theory},
+  pages={2595--2623},
+  year={2019},
+  organization={PMLR}
+}
+@article{rethink,
+  title={Understanding deep learning (still) requires rethinking generalization},
+  author={Zhang, Chiyuan and Bengio, Samy and Hardt, Moritz and Recht, Benjamin and Vinyals, Oriol},
+  journal={Communications of the ACM},
+  volume={64},
+  number={3},
+  pages={107--115},
+  year={2021},
+  publisher={ACM New York, NY, USA}
+}
+@article{reconciling,
+  title={Reconciling modern machine-learning practice and the classical bias--variance trade-off},
+  author={Belkin, Mikhail and Hsu, Daniel and Ma, Siyuan and Mandal, Soumik},
+  journal={Proceedings of the National Academy of Sciences},
+  volume={116},
+  number={32},
+  pages={15849--15854},
+  year={2019},
+  publisher={National Acad Sciences}
+}
+@article{twomodels,
+  title={Two models of double descent for weak features},
+  author={Belkin, Mikhail and Hsu, Daniel and Xu, Ji},
+  journal={SIAM Journal on Mathematics of Data Science},
+  volume={2},
+  number={4},
+  pages={1167--1180},
+  year={2020},
+  publisher={SIAM}
+}
+@article{surprises,
+  title={Surprises in high-dimensional ridgeless least squares interpolation},
+  author={Hastie, Trevor and Montanari, Andrea and Rosset, Saharon and Tibshirani, Ryan J},
+  journal={The Annals of Statistics},
+  volume={50},
+  number={2},
+  pages={949--986},
+  year={2022},
+  publisher={Institute of Mathematical Statistics}
+}
+@inproceedings{contradict,
+  title={Does data interpolation contradict statistical optimality?},
+  author={Belkin, Mikhail and Rakhlin, Alexander and Tsybakov, Alexandre B},
+  booktitle={The 22nd International Conference on Artificial Intelligence and Statistics},
+  pages={1611--1619},
+  year={2019},
+  organization={PMLR}
+}
+@inproceedings{approxbeatsconc,
+  title={Approximation beats concentration? an approximation view on inference with smooth radial kernels},
+  author={Belkin, Mikhail},
+  booktitle={Conference On Learning Theory},
+  pages={1348--1361},
+  year={2018},
+  organization={PMLR}
+}
+@article{statdeep,
+  title={Deep learning: a statistical viewpoint},
+  author={Bartlett, Peter L and Montanari, Andrea and Rakhlin, Alexander},
+  journal={Acta numerica},
+  volume={30},
+  pages={87--201},
+  year={2021},
+  publisher={Cambridge University Press}
+}
+@inproceedings{benignimplicit,
+  title={The implicit bias of benign overfitting},
+  author={Shamir, Ohad},
+  booktitle={Conference on Learning Theory},
+  pages={448--478},
+  year={2022},
+  organization={PMLR}
+}
+@article{taxonomy,
+  title={Benign, tempered, or catastrophic: A taxonomy of overfitting},
+  author={Mallinar, Neil and Simon, James B and Abedsoltan, Amirhesam and Pandit, Parthe and Belkin, Mikhail and Nakkiran, Preetum},
+  journal={arXiv preprint arXiv:2207.06569},
+  year={2022}
+}
+@article{fitwithoutfear,
+  title={Fit without fear: remarkable mathematical phenomena of deep learning through the prism of interpolation},
+  author={Belkin, Mikhail},
+  journal={Acta Numerica},
+  volume={30},
+  pages={203--248},
+  year={2021},
+  publisher={Cambridge University Press}
+}
+@article{deepimplicitreg,
+  title={Implicit regularization in deep learning},
+  author={Neyshabur, Behnam},
+  journal={arXiv preprint arXiv:1709.01953},
+  year={2017}
+}
+@article{spectralmethodsforreg,
+  title={Spectral Methods for Regularization in Learning Theory},
+  author={Rosasco, Lorenzo and De Vito, Ernesto and Verri, Alessandro},
+  journal={Journal of Machine Learning Research},
+  year={2006}
+}
+@article{ntk,
+  title={Neural tangent kernel: Convergence and generalization in neural networks},
+  author={Jacot, Arthur and Gabriel, Franck and Hongler, Cl{\'e}ment},
+  journal={Advances in neural information processing systems},
+  volume={31},
+  year={2018}
+}
+@article{ntklaplace,
+  title={Deep neural tangent kernel and laplace kernel have the same rkhs},
+  author={Chen, Lin and Xu, Sheng},
+  journal={arXiv preprint arXiv:2009.10683},
+  year={2020}
+}

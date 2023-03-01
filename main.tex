@@ -1,13 +1,37 @@
 \documentclass[12pt]{scrreprt}
 \usepackage[T1]{fontenc}
 \usepackage{tgbonum}
+\usepackage{hyperref}
+\usepackage{microtype}
+
+\usepackage{amsthm}
+\usepackage{cleveref}
+
+\usepackage[backend=bibtex]{biblatex}
+\addbibresource{references.bib}
+
+
+
 \begin{document}
 \author{Luca Wellmeier}
 \title{Blub}
 \maketitle
 \tableofcontents
-Hallo.
-Ciao.
-Bonjour.
-\[ \oint_\gamma \frac{f(z)}{1-z} \, dz \]
+
+\input{chapters/1_learning_theory.tex}
+
+\addcontentsline{toc}{chapter}{References}
+\printbibliography[title=References]
+
+Least Squares OPerator labguage, RKHS, 
+
+Sobolev spaces Matern kernels
+
+Analysis
+    When regulatize
+
+OPtimal transport for applied amthematicians
+Filippo Santambrogio
+Jean-Michel Morel
+
 \end{document}
