@@ -7,8 +7,14 @@
 \usepackage{amsthm}
 \usepackage{cleveref}
 
-\usepackage[backend=bibtex]{biblatex}
+\usepackage[backend=bibtex,style=authoryear]{biblatex}
 \addbibresource{references.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% TOOLS WHILE WRITING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[notcite]{showkeys}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
 \author{Luca Wellmeier}
@@ -17,7 +23,8 @@
 \tableofcontents
 
 % introduction
-% say somen about memos: OPtimal transport for applied amthematicians from Filippo Santambrogio (jean-michel morel)
+% say somen about memos: OPtimal transport for applied amthematicians from 
+% Filippo Santambrogio (jean-michel morel)
 
 \input{chapters/1_learning_theory.tex}
 \input{chapters/2_least_squares.tex}
