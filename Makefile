@@ -5,7 +5,7 @@ build/:
 	mkdir -p build
 CHAPTERS=$(shell find chapters "*.tex")
 PDFLATEX_CMD=-pdflatex="pdflatex -interaction=nonstopmode"
-build/thesis.pdf: main.tex $(PARTS) | build/
+build/thesis.pdf: main.tex notation.tex references.bib $(PARTS) | build/
 	latexmk -jobname=build/thesis -quiet -bibtex $(LIVE) -f -pdf -use-make $<
 
 .PHONY: watch
