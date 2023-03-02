@@ -1,14 +1,14 @@
-\chapter{Least squares in reproducing kernel Hilbert spaces}
-
-\section{Reproducing kernel Hilbert spaces}
-\label{section:rkhs}
+\chapter{Hypotheses: Reproducing kernel Hilbert spaces}
+\label{chapter:rkhs}
 
 % literature references
 All presented results are standard and can be found with full 
 detail in \cite[Chapters 4 and 5]{steinwart}, 
 \cite[Chapter 1]{berlinet}, or \cite[Chapter 6 and 10]{wendland}.
 
-\subsection{Reproducing kernels}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Basic notions and characterizations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % literature
 This section closely follows the standard reference 
@@ -50,10 +50,9 @@ If $\K = \R$ we clearly have
     = \langle \Phi(x), \Phi(x') \rangle_F.
 \end{equation*}
 
+% matrix characterization
 As we are mostly interested in real kernels, the following 
 characterization will be very useful.
-
-% matrix characterization
 \begin{lemma}[Matrix characterization]
     A function $k \colon X \times X \to \R$ is a kernel 
     iff the Gram matrices $[k(x_i,x_j)]_{ij}$ 
@@ -156,7 +155,7 @@ However, they will also turn out to admit computationally
 efficient methods for finding good estimators even in 
 case of infinite dimensions due to the 
 \emph{representer theorem} 
-(see \cref{subsection:representer_theorem}) 
+(see \cref{section:representer}) 
 that asserts minimizers of empirical risk functional
 to be expressable with as many coefficients as there are
 samples.
@@ -366,14 +365,18 @@ then its norm can computed directly as
 \begin{equation*}
     \| f \|^2_H = \sum_{i,j = 1}^n c_i c_j k(x_j,x_i).
 \end{equation*}
-As we will see in \cref{subsection:representer_theorem}, 
+As we will see in \cref{section:representer}, 
 in practice these are the only representations that we have to care 
 about in real computations.
 
-\subsection{Mercer's theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Mercer's theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Representer theorem}
-\label{subsection:representer_theorem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Representer theorem}
+\label{section:representer}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Kernels and their RKHSs allow us to extend our results for least squares 
 %and Tikhonov from linear to non-linear approximation.
@@ -395,10 +398,3 @@ about in real computations.
 %\end{proof}
 %
 %TODO: prove existence if $\alpha = 0$.
-
-\section{Empirical risk minimization and least squares}
-\subsection{The empirical risk functional on RKHSs}
-\subsection{Minimum-norm least squares estimators via pseudoinverse}
-\subsection{Spectral regularization and Tikhonov}
-
-\section{Operator language and risk decomposition}
