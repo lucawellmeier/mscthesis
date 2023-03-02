@@ -1,8 +1,19 @@
 % theorem types
 \newtheorem{thm}{Theorem}[chapter]
+\newtheorem{lemma}[thm]{Lemma}
 \newtheorem{defn}[thm]{Definition}
+
+% restricition (for display mode)
+\newcommand\restr[2]{{
+    \left.\kern-\nulldelimiterspace
+    #1
+    \vphantom{\big |}
+    \right|_{#2}
+}}
 
 % scalar fields
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\K}{\mathbb{K}}
+
+% linear algebra terms

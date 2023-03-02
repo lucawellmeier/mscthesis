@@ -1,9 +1,400 @@
 \chapter{Least squares in reproducing kernel Hilbert spaces}
 
-\section{Reproducing Kernel Hilbert Spaces}
-\subsection{Basic notions and examples}
+\section{Reproducing kernel Hilbert spaces}
+\label{section:rkhs}
+
+% literature references
+All presented results are standard and can be found with full 
+detail in \cite[Chapters 4 and 5]{steinwart}, 
+\cite[Chapter 1]{berlinet}, or \cite[Chapter 6 and 10]{wendland}.
+
+\subsection{Reproducing kernels}
+
+% literature
+This section closely follows the standard reference 
+\cite[Chapter 4]{steinwart}.
+
+\begin{defn}
+    Let $X$ be a non-empty set.
+    A function $k \colon X \times X \to \mathbb K$
+    with $\K \in \{ \R, \C \}$
+    is called a kernel 
+    if there is a Hilbert space $F$ over $\K$ 
+    and a map $\Phi \colon X \to F$ such that
+    \begin{equation} \label{eq:kernel_featmap}
+        k(x,x') = \langle \Phi(x'), \Phi(x) \rangle_F
+    \end{equation}
+    for all $x,x' \in X$.
+    In that case, $\Phi$ is called the feature map
+    and $F$ the feature space.
+\end{defn}
+
+% restrictions, linear combinations and products
+If $\tilde X$ is another non-empty set and $\iota \colon \tilde X \to X$ 
+any map, then we easily see that 
+$\tilde k(x,x') \coloneqq k(\iota(x), \iota(x'))$ 
+is a kernel on $\tilde X$.
+Hence, restrictions $\tilde k |_{\tilde X \times \tilde X}$
+are kernels in case $\tilde X \subset X$.
+Moreover, finite linear combinations and finite products of kernels
+are kernels with the intuitive feature maps and spaces, i.e. direct
+sums and tensor products, respectively.
+
+% switched order of arguments
+The exchanged variables in \cref{eq:kernel_featmap} are due to the 
+anti-linearity of the inner product in case $\K = \C$.
+If $\K = \R$ we clearly have 
+\begin{equation*}
+    k(x,x') = \langle \Phi(x'), \Phi(x) \rangle_F 
+    = \overline{\langle \Phi(x), \Phi(x') \rangle_F}
+    = \langle \Phi(x), \Phi(x') \rangle_F.
+\end{equation*}
+
+As we are mostly interested in real kernels, the following 
+characterization will be very useful.
+
+% matrix characterization
+\begin{lemma}[Matrix characterization]
+    A function $k \colon X \times X \to \R$ is a kernel 
+    iff the Gram matrices $[k(x_i,x_j)]_{ij}$ 
+    for all choices of $n$ and $x_1, \dots, x_n$
+    are symmetric and psd.
+\end{lemma}
+\begin{proof}
+    If $k$ is an $\R$-valued kernel, then all Gram matrices
+    coming from it are psd simply by defintion as an inner 
+    product in \cref{eq:kernel_featmap}.
+
+    To the other end, let $F_{\textrm{pre}}$ be the
+    space of functions $\sum_{i=1}^n c_i k(\cdot,x_i)$ for 
+    any $n$, and any choices of $c_i$ and $x_i$.
+    Let $f \coloneqq \sum_{i=1}^n c_i k(\cdot,x_i)$ and
+    $g \coloneqq \sum_{j=1}^m d_j k(\cdot,x_j')$.
+    Then, 
+    \begin{equation*}
+        \langle f,g \rangle \coloneqq 
+            \sum_i \sum_j c_i d_j k(x_j', x_i)
+            = \sum_j d_j f(x_j') = \sum_i c_i g(x_i).
+    \end{equation*}
+    is independent of the concrete representations of $f$ 
+    and $g$ by the last two equalities.
+    Furthermore, it is clearly bilinear and psd by assumption.
+    We need to show positive definiteness. 
+    Take $f$ as above but assume that $\langle f,f \rangle = 0$.
+    For any $x$ we have 
+    \begin{equation} \label{eq:firstreprprop}
+        |f(x)|^2 = | \langle f, k(\cdot,x) \rangle |^2
+            \leq \langle k(\cdot,x),k(\cdot,x) \rangle
+            \langle f,f \rangle = 0
+    \end{equation}
+    by Cauchy-Schwarz (which holds in the psd case already) 
+    proving that $\langle \cdot, \cdot \rangle$ makes 
+    $F_{\textrm{pre}}$ a pre-Hilbert space.
+    Now, simply take the isometric embedding into the completion 
+    $\iota \colon F_{\textrm{pre}} \to F$
+    and observe that
+    \begin{equation*}
+        k(x,x') = 
+            \langle k(\cdot,x'), k(\cdot,x) \rangle_{F_{\textrm{pre}}}
+            = \langle \iota k(\cdot,x'), \iota k(\cdot,x) \rangle_F,
+    \end{equation*}
+    i.e. $x \mapsto \iota k(\cdot,x)$ is a feature map and, 
+    consequently, $k$ a kernel.
+\end{proof}
+
+% point-wise limits
+An easy but important consequence of this is that point-wise limits
+of real kernels are again real kernels.
+Indeed, symmetry is a closed condition and so is the psd property 
+which translates to 
+$\sum_i \sum_j c_i c_j k(x_j,x_i) \geq 0$.
+
+% reproducing property
+In the proof above in the first part of \cref{eq:firstreprprop}
+we used that 
+\begin{equation*}
+    f(x) = \sum_i c_i k(x_i,x) = \langle f, k(\cdot,x) \rangle
+\end{equation*}
+in the given context.
+We were able to express function evaluation of \emph{any} 
+function of the space in terms of its inner product with 
+the underlying kernel.
+We will now proceed to generalize this as the 
+\emph{reproducing property}.
+
+\begin{defn}
+    Let $X$ be a non-empty set and $H$ a $\K$-Hilbert space
+    of functions $X \to \K$.
+    \begin{itemize}
+        \item We call $H$ a reproducing kernel Hilbert space
+            (RKHS) if the evaluation functional $L_x \colon H \to \K$ 
+            defined by $f \mapsto L_xf \coloneqq f(x)$ is continuous.  
+        \item A function $k \colon X \times X \to \K$ is called 
+            a reproducing kernel if $k(\cdot,x) \in H$ for any 
+            $x$ and it satisfies the reproducing property
+            \begin{equation}\label{eq:reprprop}
+                f(x) = \langle f,k(\cdot,x) \rangle
+            \end{equation}
+            for any $x$ and $f \in H$.
+    \end{itemize}
+\end{defn}
+
+% norm = point-wise convergence
+RKHSs are a prime source of rich hypothesis spaces.
+Having a continuous evaluation functional means that norm 
+convergence already implies point-wise convergence:
+if $f_n \to f$ in $H$, then 
+\begin{equation}\label{eq:normconv_pwconv}
+    |f_n(x) - f(x)| = |L_x(f_n - f)| 
+        \leq \|L_x\| \|f_n - f\| \to 0.
+\end{equation}
+While this conveniently avoids many issues found 
+in $L^p$ spaces, it is a reasonably mild condition:
+Sobolev(-Hilbert) spaces $H^s$ with real smoothness index
+satisfy this (see later in \cref{chapter:sobolev_kernels}).
+However, they will also turn out to admit computationally 
+efficient methods for finding good estimators even in 
+case of infinite dimensions due to the 
+\emph{representer theorem} 
+(see \cref{subsection:representer_theorem}) 
+that asserts minimizers of empirical risk functional
+to be expressable with as many coefficients as there are
+samples.
+
+% justify the name "reproducing kernel"
+Let us justify the similarity of the names.
+Having a reproducing kernel on a Hilbert function space
+is sufficient for it to be an RKHS as the name suggests.
+Indeed, the evaluation functional is bounded by reproducing 
+property and Cauchy-Schwarz:
+\begin{equation*}
+    |L_x(f)| = |f(x)| = |\langle k(\cdot,x),f \rangle|
+        \leq \|k(\cdot,x)\| \|f\|.
+\end{equation*}
+Moreover, a reproducing kernel on $H$ is a kernel on $H$ in 
+the previous sense: $H$ itself acts as the feature space with 
+feature map $\Phi(x) \coloneqq k(\cdot,x)$.
+The reproducing property asserts that \cref{eq:kernel_featmap} 
+holds.
+$\Phi$ is called the \emph{canonical feature map}.
+
+% the "kernel" part of the main
+However, the relations between rkhss and kernels
+are stronger as the next theorem shows.
+The proof will reveal some interesting secondary properties that 
+we will collect afterwards.
+
+\begin{thm}[RKHSs and kernels are 1-to-1]
+    Each RKHS has a unique reproducing kernel and, conversely, 
+    every kernel has a unique rkhs for which it is a reproducing
+    kernel.
+\end{thm}
+\begin{proof}
+    We prove the first part.
+    Let $H$ be a rkhs.
+    We show existence and uniqueness of a reproducing kernel.
+    \begin{itemize}
+        \item Assume first that we already a reproducing kernel $k$.
+            For any onb $(e_i)_{i \in I}$ and any $x'$
+            we obtain the basis representation
+            \begin{equation*}
+                k(\cdot,x') = \sum_i \langle k(\cdot,x'),e_i \rangle e_i
+                    = \sum_i \overline{e_i(x')} e_i
+            \end{equation*}
+            which converges in the $H$-norm and hence point-wise:
+            \begin{equation}\label{eq:kernel_onb}
+                k(x,x') = \sum_i \overline{e_i(x')} e_i(x).
+            \end{equation}
+            This expression holds independently for arbitrary $k$ 
+            and any onb so that, if we can find any reproducing kernel,
+            it will be unique.
+        \item Now, over to existence.
+            Define $k(x,x') \coloneqq \langle L_x, L_{x'} \rangle_{H^*}$.
+            We prove that this is a reproducing kernel using the 
+            isometric anti-linear (inverse) Riesz isomorphism 
+            $R \colon H^* \to H$.
+            We have
+            \begin{equation*}
+                k(x,x') = \langle L_x,L_{x'} \rangle_{H^*}
+                    = \langle R L_{x'}, R L_x \rangle_H
+                    = L_x(R L_{x'}) = (R L_{x'})(x)
+            \end{equation*}
+            or simply $k(\cdot,x') = R L_{x'}$. 
+            The reproducing property follows:
+            \begin{equation*}
+                f(x') = L_{x'} f = \langle f, R L_{x'}\rangle
+                    = \langle f, k(\cdot, x') \rangle.
+            \end{equation*}
+    \end{itemize}
+
+    Conversely, let $k$ be a kernel with feature map 
+    $\Phi_0 \colon X \to H_0$.
+    We show that there is a unique rkhs for which $k$ is 
+    a reproducing kernel.
+    \begin{itemize}
+        \item Define $H$ to be the vector space of functions
+            of the form 
+            $f_\omega = \langle \omega, \Phi_0(\cdot) \rangle_{H_0}$.
+            Define the operator $V \colon H_0 \to H$ by 
+            $V\omega \coloneqq f_\omega$ and let 
+            \begin{equation*}
+                \| f \|_H \coloneqq 
+                    \inf_{\omega' \in V^{-1}(f)} 
+                    \| \omega' \|_{H_0}.
+            \end{equation*}
+            In order to show that this defines a Hilbert space
+            we try to establish an isometry with a subspace of 
+            $H_0$.
+            First, it is easily seen that $\ker V$ is closed 
+            (take a convergent sequence and notice that 
+            $V(\cdot)(x)$ is continuous)
+            so that we have an orthogonal sum 
+            $H = \ker V \oplus H'$.
+            The restriction $V|_{H'}$ is, therefore, injective
+            and also surjective:
+            if $f = f_\omega = V \omega$, decompose 
+            $\omega = \omega_0 + \omega'$, thus, 
+            $f = V|_{H'} \omega'$.
+            Moreover, we find (with the same technique) that
+            $\|f\|_H^2 = \left\|(V|_{H'})^{-1} f \right\|_{H'}^2$,
+            which implies that $V|_{H'}$ is an isometric isomorphism
+            and $H$ is a Hilbert space.
+        \item Now we show that $k$ is a reproducing kernel of $H$.
+            Since $\Phi_0$ is its feature map we have
+            \begin{equation*}
+                k(\cdot,x) 
+                    = \langle \Phi_0(x), \Phi_0(\cdot) \rangle_{H_0}
+                    = V \Phi_0(x) \in H.
+            \end{equation*}
+            Moreover, $\langle \omega, \Phi_0(x) \rangle = 0$ for 
+            any $\omega \in \ker V$ so that 
+            $\Phi_0(x) \in (\ker V)^\perp = H'$.
+            The reproducing property follows by using the 
+            isometry of $V|_{H'}$ 
+            (and with that also that $H$ is an RKHS by our discussion 
+            earlier):
+            \begin{equation*}
+                f(x) = \langle (V|_{H'})^{-1} f, \Phi_0(x) \rangle_{H_0}
+                    = \langle f, V|_{H'} \Phi_0(x) \rangle_H
+                    = \langle f, k(\cdot,x) \rangle_H.
+            \end{equation*}
+        \item In order to prove uniqueness of $H$ we first provide 
+            a dense subspace for any $\tilde H$ for which $k$ is 
+            a reproducing kernel.
+            Let $H_{\textrm{pre}}$ be the space of all finite linear 
+            combinations $g = \sum_{i=1}^n c_i k(\cdot,x_i)$ with 
+            arbitrary $n$, $c_i$ and $x_i$.
+            Immediately we see that 
+            $H_{\textrm{pre}} \subseteq \tilde H$
+            since $k(\cdot,x) \in \tilde H$ by the reproducing property.
+            If $H_{\textrm{pre}}$ wasn't dense, then it would have 
+            a non-trivial orthogonal complement in $\tilde H$, i.e.
+            there is an $f \in H_{\textrm{pre}}^\perp$ and $x$ such that
+            $f(x) \neq 0$.
+            However, this contradicts the reproducing property: 
+            as $k(\cdot,x) \in H_{\textrm{pre}}$ we have 
+            \begin{equation*}
+                0 = \langle f, k(\cdot,x) \rangle = f(x) \neq 0.
+            \end{equation*}
+        \item The norm on $H_{\textrm{pre}}$ is only dependent on
+            $k$ so that all rkhss of $k$ have the same norm at least 
+            here.
+            Indeed, we can write using the reproducing property
+            for $g$ as above
+            \begin{equation}\label{eq:rkhsnorm}
+                \| g \|_{\tilde H}^2
+                = \langle \sum_i c_i k(\cdot,x_i),
+                    \sum_j c_j k(\cdot,x_j) \rangle
+                = \sum_{i,j} c_i \overline{c_j} k(x_j,x_i).
+            \end{equation}
+        \item Now let $H_1$ and $H_2$ be two rkhss of $k$.
+            There is no other assumptions so that we only show that 
+            $H_1 \subseteq H_2$ is an isometric inclusion.
+            We have already established that both contain the dense 
+            subset $H_{\textrm{pre}}$ and that the norms coincide 
+            there.
+            We fix $f \in H_1$ together with a sequence
+            $f_n \in H_{\textrm{pre}}$ such that $f_n \to f$ in
+            $H_1$.
+            But this sequence is also contained in $H_2$ and 
+            Cauchy there, so that $f_n \to g$ in $H_2$ for some $g$.
+            But norm convergence implies point-wise convergence
+            which implies $f = g \in H_2$.
+            Finally, since norms coincide on the dense subset 
+            \begin{equation*}
+                \|f\|_{H_1} = \lim \| f_n \|_{H_{\textrm{pre}}}
+                    = \| f \|_{H_2}.
+            \end{equation*}
+    \end{itemize}
+\end{proof}
+
+% TODO: add note on surjective isometry being hint to the 
+%       naturalness of rkhss
+
+% determining rkhss from kernels or feature maps
+Let us stress and extract some useful facts we've used in the proof.
+First, given only a kernel $k$ we now know that there is a unique rkhs
+associated to it and that $\Phi_0 \colon x \mapsto k(\cdot,x)$ is a 
+feature map.
+The closure of the linear span of all $\Phi_0(x)$ wrt the 
+pre-rkhs norm (as in the proof for $H_{\textrm{pre}})$ is 
+an rkhs of $k$ and hence must be the unique one.
+This often helps to determine the rkhs from only the kernel.
+Alternatively, seen from a modeling perspective where
+we are given a specifically designed feature 
+map $\Phi \colon X \to F$ for a problem at hand, 
+the second part of the above proof tells us that our
+rkhs will be exactly
+\begin{equation*}
+    H = \left\{ f_\varphi = \langle \varphi,\Phi(\cdot) \rangle_F 
+    \mid \varphi \in F \right\}
+\end{equation*}
+with norm of $f_\varphi$ given by the infimum over all $\|\varphi'\|_F$
+such that $f_\varphi = f_{\varphi'}$.
+
+% useful formulas from the proof
+Next, the proof revealed two useful formulas.
+Given an rkhs $H$, then \cref{eq:kernel_onb} shows that \emph{the} 
+reproducing kernel can be written simply by choosing any suitable onb 
+$(e_i)_{i \in I}$ of $H$ and computing:
+\begin{equation*}
+    k(x,x') = \sum_{i \in I} \overline{e_i(x')} e_i(x).
+\end{equation*}
+Furthermore, if we are explicitely given an 
+$f = \sum_{i=1}^n c_i k(\cdot,x_i) \in H_{\textrm{pre}}$,
+then its norm can computed directly as 
+\begin{equation*}
+    \| f \|^2_H = \sum_{i,j = 1}^n c_i c_j k(x_j,x_i).
+\end{equation*}
+As we will see in \cref{subsection:representer_theorem}, 
+in practice these are the only representations that we have to care 
+about in real computations.
+
 \subsection{Mercer's theorem}
+
 \subsection{Representer theorem}
+\label{subsection:representer_theorem}
+
+%Kernels and their RKHSs allow us to extend our results for least squares 
+%and Tikhonov from linear to non-linear approximation.
+%\begin{thm}[Representer Theorem] \label{thm:representer}
+%    Let $L \colon \X \times \R \to [0, \infty)$ be a loss function and
+%    $\{ (x_i, y_i) \}_{i=1}^n$ training data. 
+%    Let $\H$ be an RKHS over $\X$ and let $\hat R$ be the possibly 
+%    regularized empirical risk functional 
+%    $\hat R_\alpha \colon \H \to [0,\infty)$.
+%    If $\alpha > 0$, there exists a unique minimizer $\hat f_\alpha$
+%    such that $\hat R_\alpha(\hat f) = \inf_{f \in \H} \hat R(f)$.
+%    Moreover, there are coefficients $\omega_i$ such that
+%    \begin{equation} \label{eq:rkhsminimizer}
+%        \hat f(x) = \sum_{i=1}^n c_i K(x,x_i).
+%    \end{equation}
+%\end{thm}
+%\begin{proof}
+%    TODO: COPY FROM \cite[page 168]{steinwart}.
+%\end{proof}
+%
+%TODO: prove existence if $\alpha = 0$.
 
 \section{Empirical risk minimization and least squares}
 \subsection{The empirical risk functional on RKHSs}
