@@ -1,2 +1,447 @@
 \chapter{Search algorithm: Least squares}
 
+% TODO: add example of well-posed finite-dimensional linear regression
+%       and how to obtain the estimator
+
+% TODO: talk about ill-posed linear inverse problems and the 
+%       abundance of least-squares solutions
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Least squares solutions for linear inverse problems}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% literature
+We follow \cite[Chapter 3]{clason}, for this section.
+
+% well-posed linear inverse problems
+Let $H_1$ and $H_2$ be fixed Hilbert spaces and consider a linear
+operator $A \colon H_1 \to H_2$ between them.
+A \emph{linear inverse problem} consists of solving the problem
+\begin{equation*}
+    A x = y
+\end{equation*}
+in $x \in H_1$ for a given $y \in H_2$.
+Such a problem is called \emph{well-posed} if three conditions 
+are satisfied:
+a solution $x \in H_1$ exists, it is unique and the dependence
+of $x$ on $y$ is continuous (if $Ax_n \to y$ then $x_n \to x$).
+For instance, in finite dimensional Euclidean space, well-posedness
+is equivalent to $\det A \neq 0$ where the matrix inverse is 
+a continous linear operator.
+
+% ill-posed problems
+However, most interesting cases we will encounter are 
+\emph{ill-posed} or "barely well-posed" in the sense of high 
+condition numbers.
+We will develop theory here to solve them approximately
+by finding $x \in H_1$ that minimizes the 
+distance $\|Ax - y\|_{H_2}$ instead of attempting to find true 
+solutions.
+We will see later that even if solving for least squares, 
+it is not guaranteed to have solutions.
+However, if this is the case we tendentially have infinitely 
+many, which is when we choose the one with minimal norm.
+
+\begin{defn}
+    Let $A \in B(H_1,H_2)$ be a bounded operator.
+    An element $x^\dagger \in H_1$ is called a least squares 
+    (ls) solution of the inverse problem $Ax = y$ if 
+    \begin{equation*}
+        \| Ax^\dagger - y \|_{H_2} 
+        = \min_{z \in X} \| A z - y \|_{H_2}.
+    \end{equation*}
+    If $x^\dagger$ is a least squares solution and has minimal
+    norm among all other, we call it a minimum-norm least 
+    squares (mnls) solution.
+\end{defn}
+
+% pseudoinverse
+In the following we construct an operator, the \emph{pseudoinverse}, 
+whose core is defined on the domain of true invertibility and then 
+extended to the maximal domain in which ls solutions exist.
+Concretely, it maps any $y$ in its domain to the corresponding mnls 
+solution.
+\begin{prop}[Construction of pseudoinverse]
+    Let $A \in B(H_1,H_2)$ be a bounded linear operator.
+    Set 
+    \begin{equation*}
+        \widetilde A \coloneqq A|_{\ker(A)^\perp}
+            \colon \ker(A)^\perp \to \ran(A).
+    \end{equation*}
+    Then, $\widetilde A^{-1}$ extends uniquely to a linear operator
+    $A^\dagger$ such that 
+    \begin{equation*}
+        \dom(A^\dagger) = \ran(A) \oplus \ran(A)^\perp, \quad
+        \ker(A^\dagger) = \ran(A)^\perp.
+    \end{equation*}
+\end{prop}
+\begin{proof}
+    $\widetilde A$ is bijective and linear, so that $A^\dagger$ exists 
+    on $\ran(A)$ and is linear there.
+    Now let $y \in \dom(A^\dagger)$ be uniquely decomposed as 
+    $y = y_1 + y_2$ with $y_1 \in \ran(A)$ and $y_2 \in \ran(A)^\perp$ 
+    according to the orthogonal sum.
+    We must have $A^\dagger y_2 = 0$ since 
+    $y_2 \in \ker(A^\dagger) = \ran(A)^\perp$.
+    Thus, defining
+    \begin{equation*}
+        A^\dagger y \coloneqq A^\dagger y_1 + A^\dagger y_2 
+        = A^\dagger y_1 = \widetilde{A}^{-1} y_1
+    \end{equation*}
+    yields the only possible linear extension.
+\end{proof}
+
+\begin{lemma}[Properties of pseudoinverses]
+\label{lemma:pinv_props}
+    Let $A \in B(H_1, H_2)$, 
+    and let $P_k$ and $P_r$ be the orthogonal projections 
+    onto $\ker(A)$ and $\overline{\ran}(A)$, respectively.
+    Then:
+    \begin{enumerate}
+        \item \label{p:pinv_range} 
+            $\ran(A^\dagger) = \ker(A)^\perp$,
+        \item \label{p:pinv_projker}
+            $A^\dagger A = I - P_k$ and $A A ^\dagger A = A$,
+        \item \label{p:pinv_projran}
+            $AA^\dagger = P_r|_{\dom(A^\dagger)}$
+            and $A^\dagger A A^\dagger = A^\dagger$.
+    \end{enumerate}
+\end{prop}
+\begin{proof}
+    \begin{enumerate}
+        \item For all 
+            $y \in \dom(A^\dagger) = \ran(A) \oplus \ran(A)^\perp$ 
+            we have $P_r y \in \ran(A)$ (and not only in its closure!) 
+            by the direct sum decomposition so that by construction 
+            $A^\dagger y = A^\dagger P_r y = \widetilde A^{-1} P_r y$. 
+            Therefore, 
+            $A^\dagger y \in \ran(\widetilde A^{-1}) = \ker(A)^\perp$
+            and $\ran(A^\dagger) \subseteq \ker(A)^\perp$.
+            Conversely, if $x \in \ker(A)^\perp$, then 
+            $A^\dagger A x = \widetilde A^{-1} \widetilde A x = x$ 
+            so that $\ker(A)^\perp \subseteq \ran(A^\dagger)$.
+    
+        \item If $x \in H_1$,
+            \begin{align*}
+                A^\dagger A x &= \widetilde A^{-1} A x 
+                    = \widetilde A^{-1} A (P_k x + (I - P_k)x) \\
+                    &= \underbrace{\widetilde A^{-1} A P_k x}_{= 0}
+                        + \underbrace{\widetilde A^{-1} \widetilde A}_{= I}
+                        (I - P_k) x
+                    = (I - P_k) x.
+            \end{align*}
+            Hence,
+            \[ A A^\dagger A = A (I - P_k) = A - A P_k = A. \]
+        
+        \item If $y \in \dom(A^\dagger)$, then by the same arguments 
+            as in \cref{p:pinv_range}
+            \begin{equation*}
+                A A^\dagger y = A \widetilde A^{-1} P_r y 
+                = \widetilde A \widetilde A^{-1} P_r y = P_r y.
+            \end{equation*}
+            Moreover,
+            \begin{equation*}
+                A^\dagger A A^\dagger y = A^\dagger P_r y 
+                = \widetilde A^{-1} y = A^\dagger y.
+            \end{equation*}
+    \end{enumerate}
+\end{proof}
+
+Finally, we are going to see that the pseudoinverse is exactly the 
+right object to compute for finding mnls solutions as claimed in 
+the beginning.
+\begin{thm}[Characterization of ls solutions]
+\label{thm:char_ls_solution}
+    If $y \in \dom(A^\dagger)$, then the problem 
+    $\min_{x \in H_1} \| y - Ax \|$ has solutions 
+    which, in turn, are exactly the solutions of the equation
+    \begin{equation} \label{eq:char_ls_projran}
+        Ax = P_r y.
+    \end{equation}
+    Among these, there is a unique solution $x^\dagger$ of minimum 
+    norm given by $x^\dagger = A^\dagger y$ and the set of solutions 
+    to the least squares problem is $x^\dagger + \ker(A)$.
+\end{thm}
+\begin{proof}
+    Since $P_r y \in \ran(A)$ there is at least one solution $z$ of 
+    \cref{eq:char_ls_projran}.
+    By the optimality of orthogonal projections we have
+    \begin{equation*}
+        \|y-Az\| = \|y - P_r y\| 
+        = \min_{w \in \overline{\ran}(A)} \|y-w\| \leq \|y - Ax\|
+    \end{equation*}
+    for all $x \in H_1$.
+    On the other hand, if $z$ is a least squares solution then
+    \begin{equation*}
+        \|y-P_r y\| \leq \|y - Az\| = \min_{x \in H_1} \|y-Ax\|
+        = \min_{w \in \ran(A)} \|w - y\|
+        \leq \|y-P_r y\|
+    \end{equation*}
+    so we have an equality.
+    Hence the least squares solutions are exactly those to 
+    \cref{eq:char_ls_projran}.
+    
+    Each least squares solution $x$ can be decomposed as 
+    $x = \overline x + x_0 \in \ker(A)^\perp \oplus \ker(A)$.
+    Suppose there was another solution $x' = \overline x' + x_0'$. 
+    Then, $A \overline x = A x = P_r y = A x' = A \overline x'$
+    but $A$ is injective on $\ker(A)^\perp$, so 
+    $\overline x = \overline x'$ depends only on $x$.
+    By orthogonality of the two components
+    \begin{equation*}
+        \| x \|^2 = \|\overline x + x_0\|^2 
+        = \|\overline x\|^2 + \|x_0\|^2 \geq \|\overline x\|^2,
+    \end{equation*}
+    which implies
+    \begin{equation*}
+        x^\dagger \coloneqq \overline x = P_k \overline x 
+        = (I - P_k) \overline x = A^\dagger A \overline x 
+        = A^\dagger P_r y = A^\dagger A A^\dagger y 
+        = A^\dagger y
+    \end{equation*}
+    is the unique mnls solution and 
+    (we have freely used the properties in \cref{lemma:pinv_props}).
+\end{proof}
+
+% normal equations, ls and mnls solutions
+The previous characterization states that $x \in H_1$ is a 
+ls solution iff $Ax = P_r y$, that is, iff
+$Ax \in \overline\ran(A)$ (empty condition) and 
+$Ax - y \in (\overline\ran(A))^\perp$.
+Taking into account that 
+$(\overline\ran(A))^\perp = \ker(A^*)$,
+the second condition means that ls solutions to $Ax = y$ are 
+exactly those that solve the \emph{normal equation}
+$A^*(Ax - y) = 0$ usually presented as
+\begin{equation}\label{eq:normal}
+    A^* A x = A^* y.
+\end{equation}
+Moreover, this implies that the mnls solution of $Ax=y$ is 
+the solution to \cref{eq:normal} of minimal norm, hence by  
+the previous theorem
+\begin{equation}\label{eq:normal_mnls}
+    x^\dagger = (A^* A)^\dagger A^* y.
+\end{equation}
+
+% reduction to selfadjoint
+Of particular importance is the fact that \cref{eq:normal_mnls}
+reduces the computation of the mnls solution to the pseudoinverse
+of the selfadjoint operator $(A^*A)$.
+This gives us access to spectral methods that will be explored
+in \cref{section:spectral_pinv}.
+
+% continuity
+However, for now we are going to tackle the question of the 
+third condition of well-posed problems: continuous dependence
+of the solution on the data $y$.
+We will see that this is closely linked to the maximal domain
+of the pseudoinversed operator.
+Observe that
+\begin{equation*}
+    \overline{\dom(A^\dagger)}
+    = \overline{\ran(A) \oplus \ran(A)^\perp}
+    = \overline\ran(A) \oplus \ran(A)^\perp
+    = \ker(A^*)^\perp \oplus \ker(A^*)
+    = H_2,
+\end{equation*}
+which means that the domain is always dense in $H^2$.
+A crucial point of the following will be the question of 
+whether $y$ is contained in $\overline\ran(A)$ or even
+in $\ran(A)$.
+In fact, if $\ran(A)$ is closed, then the maximal domain 
+is the whole space and we will see that $A^\dagger$ is a 
+bounded, hence continuous, operator in this case.
+We will also see that this is both sufficient and necessary
+for the continuity.
+
+\begin{thm}[Continuity of pseudoinverse]
+\label{thm:pinv_continuity}
+    Let $A \in B(H_1,H_2)$.
+    Then the pseudoinverse 
+    $A^\dagger \colon \dom(A^\dagger) \to H_1$ is
+    continuous if and only if $\ran(A)$ is closed.
+\end{thm}
+\begin{proof}
+    \begin{itemize}
+        \item Let us first suppose that $T^\dagger$ is bounded,
+            which implies that it maps Cauchy sequences to Cauchy 
+            sequences.
+            Since $\dom(A^\dagger)$ is dense in $H^2$ we can 
+            pick a sequence $y_n \to y$ contained in the domain 
+            for a given $y$ and define a continuous extension
+            $\overline{A^\dagger} y \coloneqq \lim A^\dagger y_n$.
+            If we pick $y \in \overline\ran(A)$ and 
+            $(y_n) \subset \ran(A)$ we have by \cref{lemma:pinv_props}
+            \begin{equation*}
+                y = P_r y = \lim P_r y_n = \lim A A^\dagger y_n
+                    = A \overline{A^\dagger} y \in \ran(A),
+            \end{equation*}
+            and thus, $\overline\ran(A) = \ran(A)$.
+        \item Let now, conversely $\overline\ran(A) = \ran(A)$
+            i.e. $\dom(A^\dagger) = H_2$.
+            In order to prove that $A^\dagger \colon H_2 \to H_1$ is 
+            continuous, we invoke the Closed Graph theorem stating 
+            that a linear operator between Banach spaces 
+            (note that the assumption enters here for the 
+            completeness)
+            is continuous iff it has a closed graph.
+            In particular, we suppose that we have a sequence
+            $y_n \to y$ in $H_2$ so that $A^\dagger y_n \to x \in H_1$ 
+            and we have to show that $A^\dagger y = x$.
+            With the help of \cref{lemma:pinv_props} and the 
+            continuity of $A$ we find 
+            \begin{equation*}
+                P_r y = \lim P_r y_n = \lim AA^\dagger y_n 
+                = A A^\dagger y = A x,
+            \end{equation*}
+            which means that $x$ is a ls solution of $Ax = y$, 
+            e.g. of the form $x = x^\dagger + x_0$ with 
+            $x_0 \in \ker(A)$.
+            Finally, since $\ran(A^\dagger) = \ker(A)^\perp$ is 
+            closed, 
+            we have $A^\dagger y_n \to x \in \ker(A)^\perp$,
+            so that $x_0$ must be 0 and thus
+            $A^\dagger y = x^\dagger = x$.
+    \end{itemize}
+\end{proof}
+
+% TODO: add note about the compact infinite range
+
+\section{Pseudoinverse via singular value decomposition}
+\label{section:spectral_pinv}
+
+% compact selfadjoint
+As already hinted around \cref{eq:normal_mnls}, 
+we put special attention to the case of compact 
+selfadjoint operators where we always have an eigensystem.
+The interesting operators $A$ in our settings
+will be compact and we already now that computing
+their pseudoinverses can be reduced to computing 
+$(A^* A)^\dagger$, which is selfadjoint.
+
+% spectral theorem
+We recall the spectral theorem for compact selfadjoint operators.
+The proof can be found in any standard text like TODO.
+\begin{thm}[Spectral theorem for compact operators]
+\label{thm:spectral}
+    Consider a compact and selfadjoint operator $K \in K(H,H)$ on 
+    a Hilbert space $H$.
+    Then, there exists an orthonormal system $(e_n)_{n\in\N}$ in $H$ 
+    and a sequence $(\lambda_n)_{n \in \N} \to 0$ of non-negative 
+    reals (both possibly finitely null-terminating) such that 
+    \begin{equation*}
+        K x = \sum_n \lambda_n \, \langle x,e_n \rangle e_n,
+    \end{equation*}
+    The orthonormal system forms a basis of $\overline\ran(A)$.
+\end{thm}
+Clearly, the $e_n$ are eigenvectors since $K e_n = \lambda_n e_n$.
+We call $( \lambda_n, e_n )_n$ an \emph{eigensystem} of $K$,
+where we always assume that $\lambda_1 \geq \lambda_2 \geq \dots$.
+
+% svd
+This can be generalized to not necessarily selfadjoint but 
+compact operators using the \emph{singular value decomposition}
+(svd). 
+\begin{thm}[Singular value decomposition]
+    Let $K \in K(H_1,H_2)$ be a compact operator between two 
+    Hilbert spaces.
+    There is a non-increasing null-sequence $(\sigma_n)_{n \in \N}$ 
+    of positive numbers and 
+    onbs $(u_n)_n$ and $(v_n)_n$ of $\overline\ran(K)$ and 
+    $\overline\ran(K^*)$, respectively, all possibly finitely
+    null-terminating, such that
+    $K v_n = \sigma_n u_n$, $K^* u_n = \sigma_n v_n$ and 
+    \begin{equation}\label{eq:svd}
+        K x = \sum_n \sigma_n \langle x, v_n \rangle_{H_1} u_n.
+    \end{equation}
+\end{thm}
+\begin{proof}
+    We just give the constructions for the sake of better 
+    understanding but skip all checks.
+    Details can be found in \cite[Theorem 3.9]{clason}.
+
+    The operator $K^* K$ is selfadjoint and compact again, so 
+    that it admits an eigensystem $(\lambda_n, v_n)_n$
+    by \cref{thm:spectral}.
+    The $v_n$ are as required if we also consider 
+    $\sigma_n \coloneqq \sqrt{\lambda_n}$ 
+    (or $\sigma_n \coloneqq 0$ if the $v_n$ sequence terminates).
+    Finally, we define 
+    $u_n \coloneqq \sigma_n^{-1} K v_n$.
+\end{proof}
+As short-hand notation we use $(\sigma_n,u_n,v_n)_n$ to denote a
+\emph{singular system}.
+Note that the eigenvalues of $K^*K$ with eigenvectors $v_n$ 
+are exactly those $KK^*$ with eigenvectors $u_n$.
+Hence, we can also write
+\begin{equation*}
+    K^* y = \sum_n \sigma_n \langle y, u_n \rangle_{H_2} v_n.
+\end{equation*}
+
+% back to pseudoinverse
+The pseudoinverse of a compact operator can be conveniently 
+computed when its svd is known in the most natural way thinkable:
+by inverting non-zero singular values.
+Following up on \cref{thm:pinv_continuity} and the discussion 
+above, such an expression is only possible on the "continuous"
+part of the maximal domain.
+The next result characterizes this using the so-called 
+\emph{Picard condition}.
+
+\begin{thm}[Picard conditions]
+\label{thm:pinv_picard}
+    Let $K \in K(H_1,H_2)$ be a compact operator with 
+    singular system $(\sigma_n, u_n, v_n)_n$.
+    Let $y \in \overline\ran(K)$.
+    Then, $y \in \ran(K)$ iff
+    \begin{equation} \label{eq:picard}
+        \sum_{n} \sigma_n^{-2} 
+        \, |\langle y,u_n \rangle_{H_2}|^2 < \infty.
+    \end{equation}
+    In that case the pseudoinverse can be written as
+    \begin{equation} \label{eq:pinv_svd}
+        K^\dagger y = \sum_n \sigma_n^{-1} 
+        \langle y,u_n \rangle_{H_2} v_n.
+    \end{equation}
+\end{thm}
+\begin{proof}
+    \begin{itemize}
+        \item If $y \in \ran(K)$, there is $x \in H_1$ 
+            such that $Kx = y$.
+            By the properties of singular values
+            \begin{equation*}
+                \langle y, u_n \rangle_{H_2} 
+                = \langle x, K^* u_n \rangle_{H_1}
+                = \sigma_n \langle x, v_n \rangle_{H_1}.
+            \end{equation*}
+            Hence, by Bessels inequality:
+            \begin{equation*}
+                \sum_n \sigma_n^{-2}
+                    \,|\langle_{H_2} y,u_n \rangle|^2
+                = \sum_n |\langle x, v_n \rangle_{H_1}|^2.
+            \end{equation*}
+        \item Conversely, if $y \in \overline\ran(K)$ satisfies 
+            the Picard condition, the partial sums of the rhs
+            of \cref{eq:picard} form a Cauchy sequence.
+            Then, also the sequence defined by 
+            \begin{equation*}
+                x_N = \sum_{n=1}^N \sigma_n^{-1} 
+                \langle y,u_n\rangle_{H_2} v_n
+            \end{equation*}
+            is a Cauchy sequence since $\|x_N - x_M\|^2$ is easily 
+            bounded by the former.
+            It convergences to the series $x$ in the closed space
+            $\overline\ran(K^*) = \ker(K)^\perp$.
+            Therefore, using the fact that the $u_n$ are an onb 
+            for $\overline\ran(K)$,
+            \begin{equation*}
+                Kx = \sum_n \sigma_n^{-1} 
+                    \langle y,u_n \rangle_{H_2} K v_n
+                = \sum_n \langle y,u_n \rangle_{H_2} u_n
+                = P_r y = y,
+            \end{equation*}
+            i.e. $y \in \ran(K)$.
+    \end{itemize}
+    \Cref{eq:pinv_svd} follows from the fact that $Kx = P_r y$
+    is equivalent to $x = K^\dagger y$ for $x \in \ker(K)^\perp$.
+\end{proof}

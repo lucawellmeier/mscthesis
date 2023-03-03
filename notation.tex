@@ -1,7 +1,8 @@
 % theorem types
 \newtheorem{thm}{Theorem}[chapter]
-\newtheorem{lemma}[thm]{Lemma}
 \newtheorem{defn}[thm]{Definition}
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
 
 % restricition (for display mode)
 \newcommand\restr[2]{{
@@ -12,8 +13,11 @@
 }}
 
 % scalar fields
+\newcommand{\N}{\mathbb{N}}
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\K}{\mathbb{K}}
 
 % linear algebra terms
+\DeclareMathOperator{\ran}{ran}
+\DeclareMathOperator{\dom}{dom}
