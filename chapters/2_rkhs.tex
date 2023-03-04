@@ -368,6 +368,31 @@ about in real computations.
 \section{Square integrability and operator language}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+In order to incorporate rkhss as hypothesis spaces into the 
+learning setup from \cref{chapter:learning}, we introduce 
+and study operators to facilitate working with the squared loss.
+The principal one acts as a restriction of functions defined 
+on the whole space onto $L^2$-equivalence classes with support 
+defined by a probability measure.
+Think about the unknown marginal distribution or the empirical
+distribution.
+The notions introduced in this chapter are specializations of 
+results developed in \cite{devito_vvrkhs}.
+
+Let $X$ be a measurable space, $\mu$ a finite measure on it
+and $H$ a rkhs of square-integrable functions with reproducing 
+kernel $k$.
+Let 
+\begin{equation*}
+    S_\mu \colon H \to L^2(X,\mu)
+\end{equation*}
+be the \emph{restriction operator} defined by sending $f \in H$ 
+to its equivalence class $[f]$.
+
+TODO: specialize 
+\cite[Propositions 4.4, 4.5 and Corollary 4.6]{devito_vvrkhs}.
+to $p = 2$.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Empirical risk minimization in rkhss: representer theorem}
 \label{section:representer}
@@ -393,3 +418,7 @@ about in real computations.
 %\end{proof}
 %
 %TODO: prove existence if $\alpha = 0$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Sobolev spaces and their kernels}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
